@@ -1,24 +1,46 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Navbar from './Components/Navbar.js';
+import TextArea from './Components/TextArea.js';
+import Alert from './Components/Alert.js';
 
 function App() {
+
+  const[mode,setMode] = useState("light");
+  const[alert,setAlert] = useState(null);
+
+  const toggleMode = ()=>{
+    if(mode==="light"){
+      setMode("Dark");
+      document.body.style.backgroundColor = "black";
+      showAlert('success','darkmode enabled');
+    }else{
+      setMode("light");
+      document.body.style.backgroundColor = "white";
+      showAlert('success','light mode disabled');
+    }
+  }
+
+  const showAlert = (type,message)=>{
+    setAlert({
+      msg: message,
+      type: type
+    })
+
+    setTimeout(() => {
+      setAlert(null);
+    }, 2000);
+  }
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar tittle = "TextUtil" mode = {mode} toggleMode = {toggleMode}/>
+      <Alert alert = {alert}/>
+      <div className="container">
+        <TextArea heading = "Enter the text below to analyze" showAlert = {showAlert} mode = {mode}/>
+      </div>
+    </>
+      
   );
 }
 
